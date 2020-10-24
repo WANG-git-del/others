@@ -1,0 +1,489 @@
+import pyautogui,time,pyperclip
+
+pyautogui.FAILSAFE = True
+
+print("{:=^68}".format("这是个自动化小程序"))
+
+print("{:=^50}".format("在这里你可以输入你想要的操作,直接输入想要操作的哎破即可"))
+
+def enter(n):
+
+    time.sleep(n)
+
+    pyautogui.hotkey("enter")
+
+    
+
+command = input("请输入你想要的操作：")
+
+
+if "睡眠" == command or "待机" == command:
+
+    os.system('rundll32.exe powrProf.dll,SetSuspendState')
+
+elif "关机" == command:
+
+    os.system('shutdown -s -t %d' % 0)
+
+elif "QQ" == command or "qq" == command:
+
+    enter = input("是否直接登录")
+
+    if "是"in enter or "shi"in enter:
+
+        pyautogui.hotkey("win")
+
+        time.sleep(0.1)
+
+        pyautogui.hotkey("t","e","n","g","x","u","n","Q","Q"," ","enter")
+
+        time.sleep(2.5)
+
+        pyautogui.hotkey("enter")
+
+    else:
+
+        ID = input("请输入你的QQ账号:")
+
+        password = input("请输入你的QQ密码:")
+
+        pyautogui.hotkey("win")
+
+        time.sleep(0.1)
+
+        pyautogui.hotkey("t","e","n","g","x","u","n","Q","Q"," ","enter")
+
+        time.sleep(2)
+
+        pyautogui.doubleClick((850,560))
+
+        pyautogui.hotkey("backspace")
+
+        time.sleep(0.1)
+
+        pyautogui.write(ID)
+
+        pyautogui.doubleClick((850,620))
+
+        pyautogui.write(password)
+
+        pyautogui.hotkey("enter")
+
+else:
+
+    pyautogui.hotkey("win")
+
+    time.sleep(0.1)
+
+    pyperclip.copy(command)
+
+    pyautogui.hotkey("ctrl","v")
+
+    enter(0.1)
+
+    enter(0.5)
+
+=============================这是个自动化小程序==============================
+===========在这里你可以输入你想要的操作,直接输入想要操作的哎破即可===========
+请输入你想要的操作：qq音乐
+
+自动关机
+
+import os
+
+import time
+
+flag = input("是否立即关机：")
+
+if "shi" in flag or "是"in flag:
+
+    os.system('shutdown -s -t %d' %0.1)
+
+else:
+
+    input_time = input('请输入关机时间，格式如：小时:分钟  ：')
+
+    if input_time == 'off':
+
+        os.system('shutdown -a')
+
+    h1 = int(input_time[0:2])
+
+    m1 = int(input_time[3:5])
+
+    print(h1, m1)
+
+    mytime = time.strftime('%H:%M:%S')
+
+    h2 = int(mytime[0:2])
+
+    m2 = int(mytime[3:5])
+
+    if h1 > 24:
+
+        h1 = 24
+
+        m2 = 0
+
+    if m1 > 60:
+
+        m1 = 60
+
+    if h1 < h2:
+
+        h1 = h1 + 24
+
+    s1 = (h1+(m1/60.0)-h2-(m2/60.0))*3600
+
+    if s1 <= 0:
+
+        print("ERROR")
+
+    else:
+
+        print('距离关机还有 %d 秒' %s1)
+
+        os.system('shutdown -s -t %d' %s1)
+
+import os
+
+import requests
+
+import json
+
+import os
+
+
+# 获取音乐数据
+
+def music_text():
+
+    kw = input("搜索音乐(歌手也可)：")
+
+    # 请求头
+
+    headers = {
+
+        "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36 Edg/84.0.522.63",
+
+        "Cookie":"_ga=GA1.2.1083049585.1590317697; _gid=GA1.2.2053211683.1598526974; _gat=1; Hm_lvt_cdb524f42f0ce19b169a8071123a4797=1597491567,1598094297,1598096480,1598526974; Hm_lpvt_cdb524f42f0ce19b169a8071123a4797=1598526974; kw_token=HYZQI4KPK3P",
+
+        "Referer": "http://www.kuwo.cn/search/list?key=%E5%91%A8%E6%9D%B0%E4%BC%A6",
+
+        "csrf": "HYZQI4KPK3P",
+
+    }
+
+    # 参数列表
+
+    params = {
+
+        "key": kw,
+
+        # 页数
+
+        "pn": "1",
+
+        # 音乐数
+
+        "rn": "10",
+
+        "httpsStatus": "1",
+
+        "reqId": "cc337fa0-e856-11ea-8e2d-ab61b365fb50",
+
+    }
+
+    # 创建列表,后面下载需要
+
+    music_list = []
+
+    url = "http://www.kuwo.cn/api/www/search/searchMusicBykeyWord?"
+
+    res = requests.get(url = url,headers = headers,params = params)
+
+    res.encoding = "utf-8"
+
+    text = res.text
+
+    # 转成json数据
+
+    json_list = json.loads(text)
+
+    # 发现data中list是存主要数据的地方
+
+    datapack = json_list["data"]["list"]
+
+    # 遍历拿到所需要的数据，音乐名称，歌手，id...
+
+    a = 0
+
+    for i in datapack:
+
+        # 音乐名
+
+        music_name = i["name"]
+
+        # 歌手
+
+        music_singer = i["artist"]
+
+        # 待会需要的id先拿到
+
+        rid = i["rid"]
+
+        # 随便试听拿到一个音乐的接口,这是的rid就用得上了
+
+        api_music = "http://www.kuwo.cn/url?format=mp3&rid={}&response=url&type=convert_url3" \
+
+                    "&br=128kmp3&from=web&t=1598528574799&httpsStatus=1" \
+
+                    "&reqId=72259df1-e85a-11ea-a367-b5a64c5660e5".format(rid)
+
+        api_res = requests.get(url = api_music)
+
+        # 打印发现真实的url确实在里面
+
+        # print(api_res.text)
+
+        music_url = json.loads(api_res.text)["url"]
+
+        # 大功告成，试试效果
+
+        # 把数据存到字典方便下载时查找
+
+        music_dict = {}
+
+        music_dict["id"] = a
+
+        music_dict["name"] = music_name
+
+        music_dict["url"] = music_url
+
+        music_dict["singer"] = music_singer
+
+        music_list.append(music_dict)
+
+        a += 1
+
+    return music_list
+
+# 下载音乐
+
+def music_download(list1):
+
+   # print('*' * 200)
+
+    print('{0:{4}<5}{1:{4}<20}{2:{4}<15}'
+
+          .format('序号','歌名','歌手','',chr(12288)))
+
+    #print('-' * 200)
+
+    for i in list1:
+
+        print('{0:{4}<5}{1:{4}<20}{2:{4}<15}'
+
+                  .format(i['id'],i['name'],i['singer'],i['url'],chr(12288)))
+
+    #print('*' * 200)
+
+    while True:
+
+        # 下载
+
+        xiazai = int(input('输入序号(-1退出):'))
+
+        if xiazai == -1:
+
+            break
+
+        # 下载位置
+
+        root = 'E://下载的music//'
+
+        # 创建文件夹
+
+        if xiazai == list1[xiazai]['id']:
+
+            if not os.path.exists(root):
+
+                os.mkdir(root)
+
+        # 拿到字典中对应的音乐url数据
+
+        music_content = requests.get(url=list1[xiazai]['url']).content
+
+        msname = f'{list1[xiazai]["name"]}({list1[xiazai]["singer"]})'
+
+        with open(root + '{}.mp3'.format(msname),'wb') as f:
+
+            f.write(music_content)
+
+            print('下载成功')
+
+# 主程序
+
+#if __name__ == "__main__":
+
+    # 套娃中....
+
+#    music_download(music_text())
+
+
+os.getcwd()
+
+'C:\\Users\\Administrator'
+
+import tkinter as tk
+
+import requests
+
+import json
+
+import os
+
+window = tk.Tk()
+
+window.title("my window")
+
+window.geometry("800x600")
+
+label = tk.Label(window,text="请输入想要搜索的歌名(歌手)",font=("Arial",12),width=25,height=2)
+
+label.place(x=20,y=10)
+
+e = tk.Entry(window,width=30)
+
+e.place(x=300,y=20)
+
+def run1():
+
+    name = e.get()
+
+    a = tk.Label(window,bg="white",width=800,height=600)
+
+    a.place(x=0,y=0)
+
+    music_download(music_text(name))
+
+b = tk.Button(window,text="搜索",width=15,height=2,command=run1)
+
+b.place(x=600,y=10)
+
+
+def music_text(name):
+
+    kw = name
+
+    headers = {
+
+        "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36 Edg/84.0.522.63",
+
+        "Cookie":"_ga=GA1.2.1083049585.1590317697; _gid=GA1.2.2053211683.1598526974; _gat=1; Hm_lvt_cdb524f42f0ce19b169a8071123a4797=1597491567,1598094297,1598096480,1598526974; Hm_lpvt_cdb524f42f0ce19b169a8071123a4797=1598526974; kw_token=HYZQI4KPK3P",
+
+        "Referer": "http://www.kuwo.cn/search/list?key=%E5%91%A8%E6%9D%B0%E4%BC%A6",
+
+        "csrf": "HYZQI4KPK3P",
+
+    }
+
+    params = {
+
+        "key": kw,
+
+        "pn": "1",
+
+        "rn": "10",
+
+        "httpsStatus": "1",
+
+        "reqId": "cc337fa0-e856-11ea-8e2d-ab61b365fb50",
+
+    }
+
+    music_list = []
+
+    url = "http://www.kuwo.cn/api/www/search/searchMusicBykeyWord?"
+
+    res = requests.get(url = url,headers = headers,params = params)
+
+    res.encoding = "utf-8"
+
+    text = res.text
+
+    json_list = json.loads(text)
+
+    datapack = json_list["data"]["list"]
+
+    a = 0
+
+    for i in datapack:
+
+        music_name = i["name"]
+
+        music_singer = i["artist"]
+
+        rid = i["rid"]
+
+        api_music = "http://www.kuwo.cn/url?format=mp3&rid={}&response=url&type=convert_url3" \
+
+                    "&br=128kmp3&from=web&t=1598528574799&httpsStatus=1" \
+
+                    "&reqId=72259df1-e85a-11ea-a367-b5a64c5660e5".format(rid)
+
+        api_res = requests.get(url = api_music)
+
+        music_url = json.loads(api_res.text)["url"]
+
+        music_dict = {}
+
+        music_dict["id"] = a
+
+        music_dict["name"] = music_name
+
+        music_dict["url"] = music_url
+
+        music_dict["singer"] = music_singer
+
+        music_list.append(music_dict)
+
+        a += 1
+
+    return music_list
+
+def music_download(list1):
+
+    tk.Label(window,text='{0:{4}<5}{1:{4}<20}{2:{4}<15}'.format('序号','歌名','歌手','',chr(12288))).pack()
+
+    for i in list1:
+
+        tk.Label(window,text='{0:{4}<5}{1:{4}<20}{2:{4}<15}'.format(i['id'],i['name'],i['singer'],i['url'],chr(12288))).pack()
+
+    while True:
+
+        xiazai = int(input('输入序号(-1退出):'))
+
+        if xiazai == -1:
+
+            break
+
+        root = 'E://下载的music//'
+
+        if xiazai == list1[xiazai]['id']:
+
+            if not os.path.exists(root):
+
+                os.mkdir(root)
+
+        music_content = requests.get(url=list1[xiazai]['url']).content
+
+        msname = f'{list1[xiazai]["name"]}({list1[xiazai]["singer"]})'
+
+        with open(root + '{}.mp3'.format(msname),'wb') as f:
+
+            f.write(music_content)
+
+            tk.messagebox.showinfo(title="good",message="下载成功")
+
+window.mainloop()
