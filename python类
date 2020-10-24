@@ -1,0 +1,560 @@
+
+继承
+
+class Ball:
+
+    def setname(self,name):
+
+        self.name = name
+
+    def kick(self):
+
+        print("该死的，谁踢我。。。。")
+
+a = Ball()
+
+a
+
+<__main__.Ball at 0x1f896cce188>
+
+a.setname("wang")
+
+a.name
+
+'wang'
+
+b = Ball()
+
+b.setname("liu")
+
+c = Ball()
+
+c.setname("ling")
+
+c.kick()
+
+该死的，谁踢我。。。。
+
+class Ball:
+
+    def __init__(self,name):
+
+        self.name = name
+
+    def kick(self):
+
+        print("该死的%s，谁踢我。。。。" % self.name)
+
+d = Ball("wag")
+
+d.kick()
+
+该死的wag，谁踢我。。。。
+
+class Person:
+
+    name = "wamh "
+
+p = Person()
+
+p.name
+
+'wamh '
+
+class Person:
+
+    __name = "wamh "
+
+    def Getname(self):
+
+        return self.__name
+
+p = Person()
+
+p.Getname()
+
+'wamh '
+
+class Parent:
+
+    def hello(self):
+
+        print("正在调用父类方法。。。。")
+
+class Chlid(Parent):
+
+    def hello(self):
+
+        print("子类")
+
+p = Parent()
+
+p.hello()
+
+正在调用父类方法。。。。
+
+c = Chlid()
+
+c.hello()
+
+子类
+
+import random as r
+
+class Fish:
+
+    def __init__(self):
+
+        self.x = r.randint(0,10)
+
+        self.y = r.randint(0,10)
+
+    
+
+    def move(self):
+
+        self.x-=1
+
+        print("我的位置是：",self.x,self.y)
+
+class Goldfish(Fish):
+
+    pass
+
+class Carp(Fish):
+
+    pass
+
+class Salmon(Fish):
+
+    pass
+
+​
+
+class Shark(Fish):
+
+    def __init__(self):
+
+        self.hungry = True
+
+        Fish.__init__(self)
+
+    def eat(self):
+
+        if self.hungry == True:
+
+            self.hungry=False
+
+            print("吃吃吃")
+
+        else:
+
+            print("不吃。。")
+
+            
+
+    
+
+f = Fish()
+
+f.move()
+
+我的位置是： 7 8
+
+goldfish = Goldfish()
+
+goldfish.move()
+
+我的位置是： 7 1
+
+shark = Shark()
+
+shark.eat()
+
+吃吃吃
+
+shark.eat()
+
+不吃。。
+
+shark.move()
+
+我的位置是： 2 8
+
+class Base1:
+
+    def foo1(self):
+
+        print("我是Basel，代言Base2")
+
+class Base2:
+
+    def foo2(self):
+
+        print("我是Base2，")
+
+class Base3(Base1,Base2):
+
+    pass
+
+​
+
+base = Base3()
+
+base.foo2()
+
+我是Base2，
+
+组合 拾遗
+
+class Turtle:
+
+    def __init__(self,x):
+
+        self.num = x
+
+class Fish:
+
+    def __init__(self,x):
+
+        self.num = x
+
+class Pool:
+
+    def __init__(self, x, y):
+
+        self.Turtle = Turtle(x)
+
+        self.fish = Fish(y)
+
+    def print_num(self):
+
+        print("水池里总共有乌龟%d,小鱼%d"%(self.Turtle.num,self.fish.num))
+
+pool = Pool(2,20)
+
+pool.print_num()
+
+水池里总共有乌龟2,小鱼20
+
+简单定制_计时器
+
+import time as t
+
+class MyTimer():
+
+    def __init__(self):
+
+        self.unit = ["年","月","天","小时","分钟","秒"]
+
+        self.prompt = "未开始计时"
+
+        self.lasted = []
+
+        self.begin = 0
+
+        self.end = 0
+
+        
+
+    def __str__(self):
+
+        return self.prompt
+
+    __repr__  =  __str__
+
+    
+
+    def __add__(self,other):
+
+        prompt = "总共运行"
+
+        result = []
+
+        for index in range(6):
+
+            result.append(self.lasted[index]+other.lasted[index])
+
+            if result[index]:
+
+                prompt+=(str(result[index])+self.unit[index])
+
+        return prompt
+
+    #开始计数
+
+    def start(self):
+
+        self.begin = t.localtime()
+
+        self.prompt = "请先调用stop停止计时"
+
+        print("开始计时")
+
+        
+
+    #停止计时
+
+    def stop(self):
+
+        self.end = t.localtime()
+
+        if not self.begin:
+
+            print("请先调用start开始计时")
+
+        self._calc()
+
+        print("计时停止")
+
+        
+
+    # 内部方法计算运行时间
+
+    def _calc(self):
+
+        self.prompt = "总共运行了"
+
+        for index in range(6):
+
+            self.lasted.append(self.end[index]-self.begin[index])
+
+            if self.lasted[index]:
+
+                self.prompt+=(str(self.lasted[index])+self.unit[index])
+
+        # 初始化 为下一次 准备
+
+        self.begin = 0
+
+        self.end = 0
+
+a = MyTimer()
+
+a.start()
+
+开始计时
+
+a.stop()
+
+计时停止
+
+a
+
+总共运行了1秒
+
+b = MyTimer()
+
+b.start()
+
+开始计时
+
+b.stop()
+
+计时停止
+
+b
+
+总共运行了3秒
+
+a+b
+
+'总共运行4秒'
+
+温度转化类
+
+class Celsius:
+
+    def __init__(self,value=26.0):
+
+        self.value = float(value)
+
+        
+
+    def __get__(self,instance,owner):
+
+        return self.value
+
+    
+
+    def __set__(self,instance,owner):
+
+        self.value = float(value)
+
+​
+
+class Fahrenheit:
+
+    
+
+    def __get__(self,instance,owner):
+
+        return instance.cel * 1.8+32
+
+    
+
+    def __set__(self,instance,owner):
+
+        instance.cel = (float(value)-32)/1.8
+
+        
+
+class Temperature:
+
+    cel = Celsius()
+
+    fah = Fahrenheit()
+
+定制序列
+返回值 及 被访问的次数
+
+class Countlist:
+
+    def __init__(self,*args):
+
+        self.values = [x for x in args]
+
+        self.count = {}.fromkeys(range(len(self.values)),0)
+
+        
+
+    def len(self):
+
+        return len(self.values)
+
+    
+
+    def __getitem__(self,key):
+
+        self.count[key]+=1
+
+        return self.values[key]
+
+c1 = Countlist(1,2,3,4,5)
+
+c2 = Countlist(2,3,4,5,6)
+
+c1[1]
+
+c1.count
+
+c2.count
+
+c1.len()
+
+迭代器
+
+it = iter("12345")
+
+next(it)
+
+next(it)
+
+it = iter("dadadaf")
+
+while True:
+
+    try:
+
+        each = next(it)
+
+    except:
+
+        break
+
+    print(each)
+
+class Fibs:
+
+    def __init__(self,n=100):
+
+        self.a = 0
+
+        self.b = 1
+
+        self.n = n
+
+    def __iter__(self):
+
+        return self
+
+    def __next__(self):
+
+        self.a,self.b = self.b,self.a+self.b
+
+        if self.a > self.n:
+
+            raise StopIteration
+
+        return self.a
+
+fibs = Fibs(200)
+
+for each in fibs:
+
+    pass
+
+    #print(each)
+
+生成器
+
+def myGen():
+
+    print("生成器被执行！")
+
+    yield 1
+
+    yield 2
+
+    yield 3
+
+myG = myGen()
+
+next(myG)
+
+next(myG)
+
+for i in myG:
+
+    print(i)
+
+def libs():
+
+    a,b = 0,1
+
+    while True:
+
+        a,b = b,a+b
+
+        yield a
+
+for each in libs():
+
+    if each>100:
+
+        break
+
+    print(each)
+
+e = (i for i in range(10))  # 元组推导式->生成器
+
+next(e)
+
+__name__
+
+import sys
+
+sys.path
+
+游戏开发
+
+import pygame
+
+pygame.ver
+
+pygame.init()
+
+(6, 0)
+
+​
+
